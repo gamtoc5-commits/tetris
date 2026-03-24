@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Tetris</title>
+    <!-- Premium Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Left Panel: Stats -->
+        <div class="panel left-panel">
+            <div class="stat-box">
+                <h2>SCORE</h2>
+                <div id="score" class="stat-value">0</div>
+            </div>
+            <div class="stat-box">
+                <h2>LINES</h2>
+                <div id="lines" class="stat-value">0</div>
+            </div>
+            <div class="stat-box">
+                <h2>LEVEL</h2>
+                <div id="level" class="stat-value">1</div>
+            </div>
+        </div>
+
+        <!-- Main Board -->
+        <div class="board-container">
+            <canvas id="board" width="300" height="600"></canvas>
+            <div id="game-overlay" class="overlay">
+                <h1 id="overlay-title">TETRIS</h1>
+                <button id="play-btn">START GAME</button>
+            </div>
+        </div>
+
+        <!-- Right Panel: Next Piece and Controls -->
+        <div class="panel right-panel">
+            <div class="stat-box next-piece-box">
+                <h2>NEXT</h2>
+                <canvas id="next-piece" width="120" height="120"></canvas>
+            </div>
+            <div class="controls-hint">
+                <p><span>↑</span> Rotate</p>
+                <p><span>← →</span> Move</p>
+                <p><span>↓</span> Soft Drop</p>
+                <p><span>Space</span> Hard Drop</p>
+                <p><span>P</span> Pause / Resume</p>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
