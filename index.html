@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <!-- Google Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Be+Vietnam+Pro:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="style.css">
     <script id="tailwind-config">
@@ -88,16 +88,16 @@
                 <span class="material-symbols-outlined">menu</span>
             </button>
             <div class="flex flex-col">
-                <h1 class="text-2xl font-bold text-[#b99fff] drop-shadow-[0_0_8px_rgba(185,159,255,0.6)] font-['Space_Grotesk'] uppercase tracking-widest">NEON KINETIC</h1>
+                <h1 class="text-2xl font-bold text-[#b99fff] drop-shadow-[0_0_8px_rgba(185,159,255,0.6)] font-['Space_Grotesk'] uppercase tracking-widest leading-none">NEON KINETIC</h1>
                 <span class="font-label text-[10px] tracking-[0.2em] text-secondary">LEVEL <span id="level">1</span></span>
             </div>
         </div>
-        <button class="text-[#b99fff] hover:text-[#00e3fd] transition-colors active:scale-95 duration-200">
+        <button id="settings-btn" class="text-[#b99fff] hover:text-[#00e3fd] transition-colors active:scale-95 duration-200">
             <span class="material-symbols-outlined">settings</span>
         </button>
     </header>
 
-    <!-- Side Menu Drawer (Shifted bottom nav here) -->
+    <!-- Side Menu Drawer -->
     <div id="side-menu" class="fixed top-0 left-0 h-full w-64 glass-panel z-[100] transform -translate-x-full transition-transform duration-300 border-r border-[#b99fff]/10 p-6 flex flex-col gap-8 shadow-[10px_0_30px_rgba(0,0,0,0.5)]">
         <div class="flex justify-between items-center">
             <p class="font-headline text-lg font-bold text-primary uppercase tracking-widest">Navigation</p>
@@ -106,21 +106,21 @@
             </button>
         </div>
         <nav class="flex flex-col gap-2">
-            <button id="nav-play" class="nav-item flex items-center gap-4 p-4 rounded-xl text-[#eee0ff]/60 hover:bg-[#b99fff]/10 transition-all duration-150 group">
-                <span class="material-symbols-outlined text-2xl group-hover:text-primary">play_arrow</span>
-                <span class="font-['Be_Vietnam_Pro'] text-sm uppercase tracking-wider group-hover:text-primary">Play Tetris</span>
+            <button id="nav-play" class="nav-item flex items-center gap-4 p-4 rounded-xl text-[#eee0ff]/60 transition-all duration-150 group">
+                <span class="material-symbols-outlined text-2xl">play_arrow</span>
+                <span class="font-['Be_Vietnam_Pro'] text-sm uppercase tracking-wider">Play Tetris</span>
             </button>
-            <button id="nav-stats" class="nav-item flex items-center gap-4 p-4 rounded-xl text-[#eee0ff]/60 hover:bg-[#b99fff]/10 transition-all duration-150 group">
-                <span class="material-symbols-outlined text-2xl group-hover:text-primary">leaderboard</span>
-                <span class="font-['Be_Vietnam_Pro'] text-sm uppercase tracking-wider group-hover:text-primary">Live Stats</span>
+            <button id="nav-stats" class="nav-item flex items-center gap-4 p-4 rounded-xl text-[#eee0ff]/60 transition-all duration-150 group">
+                <span class="material-symbols-outlined text-2xl">leaderboard</span>
+                <span class="font-['Be_Vietnam_Pro'] text-sm uppercase tracking-wider">Live Stats</span>
             </button>
-            <button class="nav-item flex items-center gap-4 p-4 rounded-xl text-[#eee0ff]/60 hover:bg-[#b99fff]/10 transition-all duration-150 group">
-                <span class="material-symbols-outlined text-2xl group-hover:text-primary">emoji_events</span>
-                <span class="font-['Be_Vietnam_Pro'] text-sm uppercase tracking-wider group-hover:text-primary">Awards</span>
+            <button id="nav-awards" class="nav-item flex items-center gap-4 p-4 rounded-xl text-[#eee0ff]/60 transition-all duration-150 group">
+                <span class="material-symbols-outlined text-2xl">emoji_events</span>
+                <span class="font-['Be_Vietnam_Pro'] text-sm uppercase tracking-wider">Awards</span>
             </button>
-            <button class="nav-item flex items-center gap-4 p-4 rounded-xl text-[#eee0ff]/60 hover:bg-[#b99fff]/10 transition-all duration-150 group">
-                <span class="material-symbols-outlined text-2xl group-hover:text-primary">person</span>
-                <span class="font-['Be_Vietnam_Pro'] text-sm uppercase tracking-wider group-hover:text-primary">User Profile</span>
+            <button id="nav-profile" class="nav-item flex items-center gap-4 p-4 rounded-xl text-[#eee0ff]/60 transition-all duration-150 group">
+                <span class="material-symbols-outlined text-2xl">person</span>
+                <span class="font-['Be_Vietnam_Pro'] text-sm uppercase tracking-wider">User Profile</span>
             </button>
         </nav>
         <div class="mt-auto pt-6 border-t border-white/5">
@@ -132,39 +132,33 @@
     <main class="flex-1 relative flex flex-col items-center justify-start px-4 pb-32 pt-2">
         <!-- PLAY VIEW -->
         <div id="play-view" class="w-full max-w-md flex gap-4 items-start justify-center transition-all duration-300">
-            <!-- Left Side: Tetris Grid -->
             <div class="relative group">
                 <div class="bg-surface-container-lowest p-1 rounded-lg border border-primary/10 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
-                    <!-- The game board canvas -->
                     <canvas id="board" width="300" height="600" class="w-[240px] h-[480px] md:w-[280px] md:h-[560px] bg-surface-container-lowest/50 block rounded-sm"></canvas>
                 </div>
             </div>
-
-            <!-- Right Side: HUD Panels -->
             <div class="flex flex-col gap-4 w-24 md:w-32">
-                <!-- Next Piece Preview -->
                 <div class="glass-panel p-3 rounded-xl border border-outline-variant/20">
                     <p class="font-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2 text-center">Next</p>
                     <div class="aspect-square bg-surface-container-lowest/40 rounded-lg flex items-center justify-center p-1">
                         <canvas id="next-piece" width="120" height="120" class="w-full h-full block"></canvas>
                     </div>
                 </div>
-                <!-- Stats -->
                 <div class="glass-panel p-3 rounded-xl border border-outline-variant/20 flex flex-col gap-3">
                     <div>
                         <p class="font-label text-[10px] uppercase tracking-wider text-on-surface-variant">Score</p>
-                        <p id="score" class="font-headline text-lg font-bold text-on-surface">0</p>
+                        <p id="score" class="font-headline text-lg font-bold text-on-surface leading-none">0</p>
                     </div>
                     <div>
                         <p class="font-label text-[10px] uppercase tracking-wider text-on-surface-variant">Lines</p>
-                        <p id="lines" class="font-headline text-lg font-bold text-on-surface">0</p>
+                        <p id="lines" class="font-headline text-lg font-bold text-on-surface leading-none">0</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- STATS VIEW -->
-        <div id="stats-view" class="hidden w-full max-w-lg mx-auto transition-all duration-300">
+        <div id="stats-view" class="hidden w-full max-w-lg mx-auto">
             <div class="mb-8 flex justify-between items-end">
                 <div>
                     <p class="font-label text-secondary text-xs uppercase tracking-[0.2em] mb-1">Session Active</p>
@@ -176,50 +170,81 @@
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div class="col-span-2 bg-surface-container-low border border-primary/30 rounded-xl p-6 relative overflow-hidden group neon-border-glow">
-                    <div class="absolute top-0 right-0 p-4 opacity-10">
-                        <span class="material-symbols-outlined text-8xl" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
-                    </div>
+                    <div class="absolute top-0 right-0 p-4 opacity-10"><span class="material-symbols-outlined text-8xl" style="font-variation-settings: 'FILL' 1;">emoji_events</span></div>
                     <div class="relative z-10">
                         <p class="font-label text-primary-fixed-dim text-[10px] uppercase tracking-[0.3em] mb-2">Current Score</p>
-                        <div class="flex items-baseline gap-2">
-                            <span class="font-headline text-5xl font-extrabold text-on-surface neon-glow-primary stat-score">0</span>
-                        </div>
+                        <span class="font-headline text-5xl font-extrabold text-on-surface neon-glow-primary stat-score">0</span>
                     </div>
                 </div>
                 <div class="bg-surface-container-low border border-primary/20 rounded-xl p-5 backdrop-blur-sm">
-                    <div class="flex items-center gap-2 mb-3">
-                        <span class="material-symbols-outlined text-secondary text-lg">reorder</span>
-                        <p class="font-label text-on-surface-variant text-[10px] uppercase tracking-widest">Lines Cleared</p>
-                    </div>
+                    <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-secondary text-lg">reorder</span><p class="font-label text-on-surface-variant text-[10px] uppercase tracking-widest">Lines Cleared</p></div>
                     <p class="font-headline text-3xl font-bold text-on-surface stat-lines">0</p>
                 </div>
                 <div class="bg-surface-container-low border border-primary/20 rounded-xl p-5 backdrop-blur-sm">
-                    <div class="flex items-center gap-2 mb-3">
-                        <span class="material-symbols-outlined text-tertiary text-lg">timer</span>
-                        <p class="font-label text-on-surface-variant text-[10px] uppercase tracking-widest">High Score</p>
-                    </div>
-                    <p class="font-headline text-3xl font-bold text-on-surface stat-high-score">0</p>
+                    <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-tertiary text-lg">timer</span><p class="font-label text-on-surface-variant text-[10px] uppercase tracking-widest">Time</p></div>
+                    <p id="stat-time" class="font-headline text-3xl font-bold text-on-surface">00:00</p>
                 </div>
             </div>
         </div>
 
-        <!-- ON-SCREEN CONTROLS (Enlarged and positioned lower for mobile) -->
+        <!-- AWARDS VIEW -->
+        <div id="awards-view" class="hidden w-full max-w-lg mx-auto">
+             <div class="mb-8">
+                <p class="font-label text-secondary text-xs uppercase tracking-[0.2em] mb-1">Achievements</p>
+                <h2 class="font-headline text-3xl font-bold uppercase tracking-tight text-on-surface">Awards</h2>
+            </div>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="glass-panel p-4 rounded-xl border border-primary/10 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary border border-primary/30"><span class="material-symbols-outlined">star</span></div>
+                    <div><p class="font-headline font-bold text-on-surface">Tetris Master</p><p class="text-xs text-on-surface-variant">Score 50,000 points in one session.</p></div>
+                </div>
+                <div class="glass-panel p-4 rounded-xl border border-secondary/10 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center text-secondary border border-secondary/30"><span class="material-symbols-outlined">bolt</span></div>
+                    <div><p class="font-headline font-bold text-on-surface">Speed Demon</p><p class="text-xs text-on-surface-variant">Reach Level 15.</p></div>
+                </div>
+                <div class="glass-panel p-4 rounded-xl border border-tertiary/10 flex items-center gap-4 opacity-50 grayscale">
+                    <div class="w-12 h-12 rounded-full bg-tertiary/20 flex items-center justify-center text-tertiary border border-tertiary/30"><span class="material-symbols-outlined">layers</span></div>
+                    <div><p class="font-headline font-bold text-on-surface">Line King</p><p class="text-xs text-on-surface-variant">Clear 100 lines in one session.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROFILE VIEW -->
+        <div id="profile-view" class="hidden w-full max-w-lg mx-auto">
+            <div class="mb-8 flex items-center gap-4">
+                <div class="w-20 h-20 rounded-full border-2 border-primary p-1 shadow-[0_0_20px_rgba(185,159,255,0.4)]">
+                    <div class="w-full h-full rounded-full bg-surface-container-highest flex items-center justify-center text-primary text-4xl"><span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">person</span></div>
+                </div>
+                <div>
+                    <h2 class="font-headline text-3xl font-bold uppercase tracking-tight text-on-surface">KINETIC PILOT</h2>
+                    <p class="text-xs font-label text-secondary uppercase tracking-[0.2em]">Rank: Rookie</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                 <div class="glass-panel col-span-2 p-6 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+                    <p class="font-label text-on-surface-variant text-[10px] uppercase tracking-widest mb-1">Lifetime Score</p>
+                    <p id="profile-total-score" class="font-headline text-4xl font-extrabold text-primary neon-glow-primary">0</p>
+                </div>
+                <div class="glass-panel p-5 rounded-xl border border-outline-variant/20">
+                    <p class="font-label text-on-surface-variant text-[10px] uppercase tracking-widest mb-1">Total Games</p>
+                    <p id="profile-total-games" class="font-headline text-2xl font-bold text-on-surface">0</p>
+                </div>
+                <div class="glass-panel p-5 rounded-xl border border-outline-variant/20">
+                    <p class="font-label text-on-surface-variant text-[10px] uppercase tracking-widest mb-1">Flight Time</p>
+                    <p id="profile-total-time" class="font-headline text-2xl font-bold text-on-surface">0m</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ON-SCREEN CONTROLS -->
         <div id="game-controls" class="fixed bottom-12 left-0 w-full px-6 flex justify-between items-end z-40 max-w-md mx-auto left-1/2 -translate-x-1/2">
             <div class="flex gap-4">
-                <button id="ctrl-left" class="w-20 h-20 rounded-full glass-panel border border-primary/20 flex items-center justify-center text-primary active:scale-90 transition-transform neon-glow-primary">
-                    <span class="material-symbols-outlined text-4xl">chevron_left</span>
-                </button>
-                <button id="ctrl-right" class="w-20 h-20 rounded-full glass-panel border border-primary/20 flex items-center justify-center text-primary active:scale-90 transition-transform neon-glow-primary">
-                    <span class="material-symbols-outlined text-4xl">chevron_right</span>
-                </button>
+                <button id="ctrl-left" class="w-20 h-20 rounded-full glass-panel border border-primary/20 flex items-center justify-center text-primary active:scale-90 transition-transform neon-glow-primary"><span class="material-symbols-outlined text-4xl">chevron_left</span></button>
+                <button id="ctrl-right" class="w-20 h-20 rounded-full glass-panel border border-primary/20 flex items-center justify-center text-primary active:scale-90 transition-transform neon-glow-primary"><span class="material-symbols-outlined text-4xl">chevron_right</span></button>
             </div>
             <div class="flex flex-col gap-6 items-center">
-                <button id="ctrl-rotate" class="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-on-primary shadow-lg shadow-primary/40 active:scale-90 transition-transform">
-                    <span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'FILL' 1;">rotate_right</span>
-                </button>
-                <button id="ctrl-down" class="w-20 h-20 rounded-full glass-panel border border-secondary/20 flex items-center justify-center text-secondary active:scale-90 transition-transform neon-glow-secondary">
-                    <span class="material-symbols-outlined text-4xl">keyboard_double_arrow_down</span>
-                </button>
+                <button id="ctrl-rotate" class="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-on-primary shadow-lg shadow-primary/40 active:scale-90 transition-transform"><span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'FILL' 1;">rotate_right</span></button>
+                <button id="ctrl-down" class="w-20 h-20 rounded-full glass-panel border border-secondary/20 flex items-center justify-center text-secondary active:scale-90 transition-transform neon-glow-secondary"><span class="material-symbols-outlined text-4xl">keyboard_double_arrow_down</span></button>
             </div>
         </div>
 
@@ -227,31 +252,38 @@
         <div id="game-overlay" class="absolute inset-0 z-50 flex flex-col items-center justify-center px-8 text-center bg-[#140727]/85 backdrop-blur-md transition-opacity duration-300">
             <div id="game-start-content" class="flex flex-col items-center">
                 <h1 id="overlay-title" class="font-headline text-6xl font-bold text-primary neon-glow-primary mb-12 tracking-tighter">TETRIS</h1>
-                <button id="play-btn" class="w-full max-w-sm py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg rounded-full shadow-[0_0_20px_rgba(185,159,255,0.4)] active:scale-95 transition-transform uppercase tracking-widest">
-                    START SESSION
-                </button>
+                <button id="play-btn" class="w-full max-w-sm py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg rounded-full shadow-[0_0_20px_rgba(185,159,255,0.4)] active:scale-95 transition-transform uppercase tracking-widest">START SESSION</button>
+            </div>
+
+            <!-- Settings Menu -->
+            <div id="settings-content" class="hidden flex flex-col items-center w-full max-w-sm">
+                <h2 class="font-headline text-4xl font-bold text-primary neon-glow-primary mb-8 uppercase italic tracking-widest">Paused</h2>
+                <div class="flex flex-col gap-4 w-full">
+                    <button id="resume-btn" class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg rounded-full shadow-[0_0_20px_rgba(185,159,255,0.4)] active:scale-95 transition-transform">RESUME SESSION</button>
+                    <button id="restart-btn" class="w-full py-4 bg-surface-container-highest/50 text-secondary border border-secondary/20 font-headline font-bold text-lg rounded-full backdrop-blur-md active:scale-95 transition-all">RESTART GAME</button>
+                    <button id="home-btn" class="w-full py-4 bg-surface-container-highest/50 text-on-surface-variant border border-outline/20 font-headline font-bold text-lg rounded-full backdrop-blur-md active:scale-95 transition-all">RETURN HOME</button>
+                </div>
             </div>
 
             <div id="game-over-content" class="hidden flex flex-col items-center">
                 <p class="font-headline text-label-sm tracking-[0.4em] text-primary/60 mb-2 uppercase">Session Ended</p>
-                <h2 class="font-headline text-6xl md:text-7xl font-bold text-tertiary neon-glow-tertiary leading-tight italic tracking-tighter mb-12">
-                    GAME<br/>OVER
-                </h2>
+                <h2 class="font-headline text-6xl md:text-7xl font-bold text-tertiary neon-glow-tertiary leading-tight italic tracking-tighter mb-12">GAME<br/>OVER</h2>
                 <div class="w-full max-w-sm grid grid-cols-2 gap-4 mb-12">
                     <div class="glass-panel col-span-2 p-6 rounded-xl border border-primary/10 flex flex-col items-center">
                         <span class="font-headline text-xs tracking-widest text-on-surface-variant uppercase mb-1">Final Score</span>
                         <span id="final-score" class="font-headline text-5xl font-bold text-primary neon-glow-primary">0</span>
                     </div>
                 </div>
-                <button id="retry-btn" class="w-full max-w-sm py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg rounded-full shadow-[0_0_20px_rgba(185,159,255,0.4)] active:scale-95 transition-transform flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined">refresh</span>
-                    RETRY SESSION
-                </button>
+                <button id="retry-btn" class="w-full max-w-sm py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-bold text-lg rounded-full shadow-[0_0_20px_rgba(185,159,255,0.4)] active:scale-95 transition-transform flex items-center justify-center gap-2"><span class="material-symbols-outlined">refresh</span>RETRY SESSION</button>
             </div>
+        </div>
+
+        <!-- Countdown Overlay -->
+        <div id="countdown-overlay" class="absolute inset-0 z-[60] flex items-center justify-center pointer-events-none hidden">
+            <span id="countdown-text" class="font-headline text-[15rem] font-bold text-primary neon-glow-primary transition-all duration-300">3</span>
         </div>
     </main>
 
-    <!-- Ambient Background Glows -->
     <div class="fixed top-1/4 -left-20 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
     <div class="fixed bottom-1/4 -right-20 w-64 h-64 bg-secondary/10 rounded-full blur-[100px] pointer-events-none"></div>
 
