@@ -84,7 +84,7 @@
     <!-- TopAppBar -->
     <header class="w-full bg-transparent flex justify-between items-center px-6 py-4 z-50">
         <div class="flex items-center gap-4">
-            <button class="text-[#b99fff] hover:text-[#00e3fd] transition-colors active:scale-95 duration-200">
+            <button id="menu-toggle" class="text-[#b99fff] hover:text-[#00e3fd] transition-colors active:scale-95 duration-200">
                 <span class="material-symbols-outlined">menu</span>
             </button>
             <div class="flex flex-col">
@@ -96,6 +96,38 @@
             <span class="material-symbols-outlined">settings</span>
         </button>
     </header>
+
+    <!-- Side Menu Drawer (Shifted bottom nav here) -->
+    <div id="side-menu" class="fixed top-0 left-0 h-full w-64 glass-panel z-[100] transform -translate-x-full transition-transform duration-300 border-r border-[#b99fff]/10 p-6 flex flex-col gap-8 shadow-[10px_0_30px_rgba(0,0,0,0.5)]">
+        <div class="flex justify-between items-center">
+            <p class="font-headline text-lg font-bold text-primary uppercase tracking-widest">Navigation</p>
+            <button id="menu-close" class="text-on-surface/40 hover:text-primary transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <nav class="flex flex-col gap-2">
+            <button id="nav-play" class="nav-item flex items-center gap-4 p-4 rounded-xl text-[#eee0ff]/60 hover:bg-[#b99fff]/10 transition-all duration-150 group">
+                <span class="material-symbols-outlined text-2xl group-hover:text-primary">play_arrow</span>
+                <span class="font-['Be_Vietnam_Pro'] text-sm uppercase tracking-wider group-hover:text-primary">Play Tetris</span>
+            </button>
+            <button id="nav-stats" class="nav-item flex items-center gap-4 p-4 rounded-xl text-[#eee0ff]/60 hover:bg-[#b99fff]/10 transition-all duration-150 group">
+                <span class="material-symbols-outlined text-2xl group-hover:text-primary">leaderboard</span>
+                <span class="font-['Be_Vietnam_Pro'] text-sm uppercase tracking-wider group-hover:text-primary">Live Stats</span>
+            </button>
+            <button class="nav-item flex items-center gap-4 p-4 rounded-xl text-[#eee0ff]/60 hover:bg-[#b99fff]/10 transition-all duration-150 group">
+                <span class="material-symbols-outlined text-2xl group-hover:text-primary">emoji_events</span>
+                <span class="font-['Be_Vietnam_Pro'] text-sm uppercase tracking-wider group-hover:text-primary">Awards</span>
+            </button>
+            <button class="nav-item flex items-center gap-4 p-4 rounded-xl text-[#eee0ff]/60 hover:bg-[#b99fff]/10 transition-all duration-150 group">
+                <span class="material-symbols-outlined text-2xl group-hover:text-primary">person</span>
+                <span class="font-['Be_Vietnam_Pro'] text-sm uppercase tracking-wider group-hover:text-primary">User Profile</span>
+            </button>
+        </nav>
+        <div class="mt-auto pt-6 border-t border-white/5">
+            <p class="text-[10px] text-on-surface-variant uppercase tracking-widest text-center">Neon Kinetic v4.5</p>
+        </div>
+    </div>
+    <div id="side-menu-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[90] hidden opacity-0 transition-opacity duration-300"></div>
 
     <main class="flex-1 relative flex flex-col items-center justify-start px-4 pb-32 pt-2">
         <!-- PLAY VIEW -->
@@ -131,7 +163,7 @@
             </div>
         </div>
 
-        <!-- STATS VIEW (Hidden by default) -->
+        <!-- STATS VIEW -->
         <div id="stats-view" class="hidden w-full max-w-lg mx-auto transition-all duration-300">
             <div class="mb-8 flex justify-between items-end">
                 <div>
@@ -171,27 +203,27 @@
             </div>
         </div>
 
-        <!-- ON-SCREEN CONTROLS -->
-        <div id="game-controls" class="fixed bottom-24 left-0 w-full px-6 flex justify-between items-end z-40 max-w-md mx-auto left-1/2 -translate-x-1/2">
-            <div class="flex gap-2">
-                <button id="ctrl-left" class="w-14 h-14 rounded-full glass-panel border border-primary/20 flex items-center justify-center text-primary active:scale-90 transition-transform neon-glow-primary">
-                    <span class="material-symbols-outlined text-3xl">chevron_left</span>
+        <!-- ON-SCREEN CONTROLS (Enlarged and positioned lower for mobile) -->
+        <div id="game-controls" class="fixed bottom-12 left-0 w-full px-6 flex justify-between items-end z-40 max-w-md mx-auto left-1/2 -translate-x-1/2">
+            <div class="flex gap-4">
+                <button id="ctrl-left" class="w-20 h-20 rounded-full glass-panel border border-primary/20 flex items-center justify-center text-primary active:scale-90 transition-transform neon-glow-primary">
+                    <span class="material-symbols-outlined text-4xl">chevron_left</span>
                 </button>
-                <button id="ctrl-right" class="w-14 h-14 rounded-full glass-panel border border-primary/20 flex items-center justify-center text-primary active:scale-90 transition-transform neon-glow-primary">
-                    <span class="material-symbols-outlined text-3xl">chevron_right</span>
+                <button id="ctrl-right" class="w-20 h-20 rounded-full glass-panel border border-primary/20 flex items-center justify-center text-primary active:scale-90 transition-transform neon-glow-primary">
+                    <span class="material-symbols-outlined text-4xl">chevron_right</span>
                 </button>
             </div>
-            <div class="flex flex-col gap-4 items-center">
-                <button id="ctrl-rotate" class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-on-primary shadow-lg shadow-primary/40 active:scale-90 transition-transform">
-                    <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">rotate_right</span>
+            <div class="flex flex-col gap-6 items-center">
+                <button id="ctrl-rotate" class="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-on-primary shadow-lg shadow-primary/40 active:scale-90 transition-transform">
+                    <span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'FILL' 1;">rotate_right</span>
                 </button>
-                <button id="ctrl-down" class="w-14 h-14 rounded-full glass-panel border border-secondary/20 flex items-center justify-center text-secondary active:scale-90 transition-transform neon-glow-secondary">
-                    <span class="material-symbols-outlined text-3xl">keyboard_double_arrow_down</span>
+                <button id="ctrl-down" class="w-20 h-20 rounded-full glass-panel border border-secondary/20 flex items-center justify-center text-secondary active:scale-90 transition-transform neon-glow-secondary">
+                    <span class="material-symbols-outlined text-4xl">keyboard_double_arrow_down</span>
                 </button>
             </div>
         </div>
 
-        <!-- OVERLAYS (Start/Pause/GameOver) -->
+        <!-- OVERLAYS -->
         <div id="game-overlay" class="absolute inset-0 z-50 flex flex-col items-center justify-center px-8 text-center bg-[#140727]/85 backdrop-blur-md transition-opacity duration-300">
             <div id="game-start-content" class="flex flex-col items-center">
                 <h1 id="overlay-title" class="font-headline text-6xl font-bold text-primary neon-glow-primary mb-12 tracking-tighter">TETRIS</h1>
@@ -218,26 +250,6 @@
             </div>
         </div>
     </main>
-
-    <!-- BottomNavBar -->
-    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-8 pb-6 pt-4 bg-[#140727]/80 backdrop-blur-xl rounded-t-[2rem] border-t border-[#b99fff]/10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-        <button id="nav-play" class="nav-item flex flex-col items-center justify-center bg-[#b99fff]/20 text-[#b99fff] rounded-full p-3 shadow-[0_0_15px_rgba(185,159,255,0.4)] active:scale-90 transition-transform duration-150">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
-            <span class="font-['Be_Vietnam_Pro'] text-[10px] uppercase tracking-tighter mt-1">Play</span>
-        </button>
-        <button id="nav-stats" class="nav-item flex flex-col items-center justify-center text-[#eee0ff]/40 p-3 hover:bg-[#b99fff]/10 active:scale-90 transition-transform duration-150">
-            <span class="material-symbols-outlined">leaderboard</span>
-            <span class="font-['Be_Vietnam_Pro'] text-[10px] uppercase tracking-tighter mt-1">Stats</span>
-        </button>
-        <button class="nav-item flex flex-col items-center justify-center text-[#eee0ff]/40 p-3 hover:bg-[#b99fff]/10 active:scale-90 transition-transform duration-150">
-            <span class="material-symbols-outlined">emoji_events</span>
-            <span class="font-['Be_Vietnam_Pro'] text-[10px] uppercase tracking-tighter mt-1">Goals</span>
-        </button>
-        <button class="nav-item flex flex-col items-center justify-center text-[#eee0ff]/40 p-3 hover:bg-[#b99fff]/10 active:scale-90 transition-transform duration-150">
-            <span class="material-symbols-outlined">person</span>
-            <span class="font-['Be_Vietnam_Pro'] text-[10px] uppercase tracking-tighter mt-1">Profile</span>
-        </button>
-    </nav>
 
     <!-- Ambient Background Glows -->
     <div class="fixed top-1/4 -left-20 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>

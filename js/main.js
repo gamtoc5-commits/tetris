@@ -15,7 +15,7 @@ const linesEl = document.getElementById('lines');
 const levelEl = document.getElementById('level');
 const overlayTitle = document.getElementById('overlay-title');
 
-// New UI Elements for GameOver and Stats
+// UI Elements for GameOver and Stats
 const startContent = document.getElementById('game-start-content');
 const gameOverContent = document.getElementById('game-over-content');
 const finalScoreEl = document.getElementById('final-score');
@@ -24,6 +24,12 @@ const playView = document.getElementById('play-view');
 const statsView = document.getElementById('stats-view');
 const navPlay = document.getElementById('nav-play');
 const navStats = document.getElementById('nav-stats');
+
+// Mobile Menu Elements
+const menuToggle = document.getElementById('menu-toggle');
+const menuClose = document.getElementById('menu-close');
+const sideMenu = document.getElementById('side-menu');
+const sideMenuOverlay = document.getElementById('side-menu-overlay');
 
 // On-screen controls
 const ctrlLeft = document.getElementById('ctrl-left');
@@ -51,19 +57,16 @@ function drawBlock(context, x, y, colorId, isGhost = false) {
 
     context.fillStyle = isGhost ? addAlpha(COLORS[colorId], 0.2) : COLORS[colorId];
     
-    // Draw block with rounded corners simulation if possible, or just keep it simple but clean
     context.beginPath();
     const radius = 4;
     context.roundRect(pxX + 1, pxY + 1, BLOCK_SIZE - 2, BLOCK_SIZE - 2, radius);
     context.fill();
     
     if (!isGhost) {
-        // Neon edge 
         context.strokeStyle = addAlpha(COLORS[colorId], 0.8);
         context.lineWidth = 2;
         context.stroke();
         
-        // Subtle highlight
         context.fillStyle = 'rgba(255, 255, 255, 0.15)';
         context.fillRect(pxX + 4, pxY + 4, BLOCK_SIZE - 8, 4);
     } else {
@@ -88,7 +91,6 @@ function updateStats() {
     linesEl.innerText = game.lines;
     levelEl.innerText = game.level;
 
-    // Update Stats View if visible
     if (!statsView.classList.contains('hidden')) {
         document.querySelector('.stat-score').innerText = game.score.toLocaleString();
         document.querySelector('.stat-lines').innerText = game.lines;
@@ -102,7 +104,6 @@ function draw() {
 
     drawGrid(ctx, ROWS, COLS);
 
-    // Draw board
     for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
             if (game.grid[r][c] > 0) {
@@ -111,7 +112,6 @@ function draw() {
         }
     }
 
-    // Draw Ghost
     let ghost = game.getGhostPiece();
     if (ghost) {
         for (let r = 0; r < ghost.shape.length; r++) {
@@ -123,7 +123,6 @@ function draw() {
         }
     }
 
-    // Draw Active Piece
     if (game.piece) {
         for (let r = 0; r < game.piece.shape.length; r++) {
             for (let c = 0; c < game.piece.shape[r].length; c++) {
@@ -134,7 +133,6 @@ function draw() {
         }
     }
     
-    // Draw Next Piece
     if (game.nextPiece) {
         const shape = game.nextPiece.shape;
         const wOffset = (4 - shape[0].length) / 2;
@@ -207,6 +205,18 @@ function togglePause() {
     }
 }
 
+function openMenu() {
+    sideMenu.classList.add('open');
+    sideMenuOverlay.classList.remove('hidden');
+    setTimeout(() => sideMenuOverlay.classList.add('show'), 10);
+}
+
+function closeMenu() {
+    sideMenu.classList.remove('open');
+    sideMenuOverlay.classList.remove('show');
+    setTimeout(() => sideMenuOverlay.classList.add('hidden'), 300);
+}
+
 // Event Listeners
 playBtn.addEventListener('click', () => {
     if (isPaused) {
@@ -220,6 +230,11 @@ retryBtn.addEventListener('click', () => {
     init();
 });
 
+// Menu Toggle Listeners
+menuToggle.addEventListener('click', openMenu);
+menuClose.addEventListener('click', closeMenu);
+sideMenuOverlay.addEventListener('click', closeMenu);
+
 // View Switching
 navPlay.addEventListener('click', (e) => {
     e.preventDefault();
@@ -227,6 +242,7 @@ navPlay.addEventListener('click', (e) => {
     statsView.classList.add('hidden');
     navPlay.classList.add('active');
     navStats.classList.remove('active');
+    closeMenu();
 });
 
 navStats.addEventListener('click', (e) => {
@@ -235,14 +251,22 @@ navStats.addEventListener('click', (e) => {
     statsView.classList.remove('hidden');
     navPlay.classList.remove('active');
     navStats.classList.add('active');
-    updateStats(); // Refresh stats view
+    updateStats();
+    closeMenu();
 });
 
-// On-screen Controls
-ctrlLeft.addEventListener('click', () => { if (!isPaused && !game.isGameOver) { game.moveLeft(); draw(); } });
-ctrlRight.addEventListener('click', () => { if (!isPaused && !game.isGameOver) { game.moveRight(); draw(); } });
-ctrlDown.addEventListener('click', () => { if (!isPaused && !game.isGameOver) { game.moveDown(); draw(); } });
-ctrlRotate.addEventListener('click', () => { if (!isPaused && !game.isGameOver) { game.rotate(); draw(); } });
+// On-screen Controls (Updated for improved touch behavior)
+const handleControl = (action) => {
+    if (!isPaused && !game.isGameOver) {
+        action();
+        draw();
+    }
+};
+
+ctrlLeft.addEventListener('click', () => handleControl(() => game.moveLeft()));
+ctrlRight.addEventListener('click', () => handleControl(() => game.moveRight()));
+ctrlDown.addEventListener('click', () => handleControl(() => game.moveDown()));
+ctrlRotate.addEventListener('click', () => handleControl(() => game.rotate()));
 
 document.addEventListener('keydown', (e) => {
     if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
@@ -274,7 +298,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Initial state
 navPlay.classList.add('active');
 draw();
-document.querySelector('.stat-high-score').innerText = "0"; // Placeholder
+document.querySelector('.stat-high-score').innerText = "0";

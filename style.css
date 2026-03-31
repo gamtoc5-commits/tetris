@@ -18,6 +18,8 @@
 body {
     background-color: var(--bg-color);
     overflow: hidden;
+    /* Prevent pull-to-refresh and other touch behaviors that might interfere with game */
+    touch-action: none;
 }
 
 .material-symbols-outlined {
@@ -46,9 +48,9 @@ body {
 
 /* Glassmorphism */
 .glass-panel {
-    background: rgba(46, 28, 75, 0.2);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(46, 28, 75, 0.4);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
 }
 
 #game-overlay {
@@ -78,5 +80,21 @@ canvas#board {
     box-shadow: 0 0 15px rgba(185, 159, 255, 0.4);
 }
 .nav-item.active span {
+    color: #b99fff;
     font-variation-settings: 'FILL' 1;
+}
+
+/* Drawer Menu Logic */
+#side-menu.open {
+    transform: translateX(0);
+}
+
+#side-menu-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Button Active State for better feedback on touch */
+button:active {
+    filter: brightness(1.2);
 }
