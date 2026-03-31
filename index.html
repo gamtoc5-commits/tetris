@@ -17,64 +17,21 @@
             theme: {
                 extend: {
                     colors: {
-                        "on-secondary-fixed-variant": "#005964",
-                        "tertiary-container": "#fe00fe",
-                        "tertiary": "#ff51fa",
-                        "error-container": "#a70138",
-                        "secondary-fixed": "#26e6ff",
+                        "primary": "#b99fff",
                         "secondary": "#00e3fd",
-                        "on-secondary": "#004d57",
+                        "tertiary": "#ff51fa",
                         "background": "#140727",
-                        "on-error": "#490013",
-                        "error": "#ff6e84",
-                        "on-secondary-fixed": "#003a42",
-                        "inverse-primary": "#6f26f6",
-                        "surface-container-high": "#271641",
-                        "secondary-fixed-dim": "#00d7f0",
-                        "surface-variant": "#2e1c4b",
-                        "primary-fixed-dim": "#a17cff",
-                        "on-tertiary-container": "#230023",
-                        "surface-container": "#201139",
-                        "error-dim": "#d73357",
-                        "surface-container-highest": "#2e1c4b",
-                        "surface-container-low": "#190b30",
-                        "surface-bright": "#352254",
-                        "tertiary-fixed": "#ff81f5",
-                        "on-surface-variant": "#b5a4cd",
-                        "outline": "#7e6f95",
-                        "on-primary-fixed": "#000000",
-                        "on-primary-fixed-variant": "#350087",
-                        "on-tertiary-fixed": "#320032",
-                        "primary-fixed": "#ad8eff",
-                        "primary-container": "#ad8eff",
-                        "inverse-on-surface": "#5d4e73",
-                        "primary-dim": "#844eff",
-                        "on-surface": "#eee0ff",
-                        "on-secondary-container": "#e8fbff",
-                        "inverse-surface": "#fef7ff",
-                        "secondary-container": "#006875",
-                        "on-error-container": "#ffb2b9",
-                        "on-tertiary": "#400040",
-                        "on-primary-container": "#2b006f",
-                        "on-primary": "#38008d",
-                        "on-tertiary-fixed-variant": "#6a006a",
-                        "surface-tint": "#b99fff",
                         "surface": "#140727",
-                        "tertiary-fixed-dim": "#ff61f8",
-                        "surface-dim": "#140727",
-                        "secondary-dim": "#00d4ec",
-                        "on-background": "#eee0ff",
-                        "tertiary-dim": "#ff51fa",
-                        "outline-variant": "#4f4165",
-                        "surface-container-lowest": "#000000",
-                        "primary": "#b99fff"
+                        "on-surface": "#eee0ff",
+                        "on-surface-variant": "#b5a4cd",
+                        "surface-container-highest": "#2e1c4b",
+                        "surface-container-lowest": "#000000"
                     },
                     fontFamily: {
                         "headline": ["Space Grotesk"],
                         "body": ["Be Vietnam Pro"],
                         "label": ["Space Grotesk"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    }
                 },
             },
         }
@@ -164,26 +121,31 @@
                     <p class="font-label text-secondary text-xs uppercase tracking-[0.2em] mb-1">Session Active</p>
                     <h2 class="font-headline text-3xl font-bold uppercase tracking-tight text-on-surface">Live Stats</h2>
                 </div>
-                <div class="bg-surface-container-high px-4 py-2 rounded-lg border border-primary/20 backdrop-blur-md">
-                    <span class="font-label text-primary-fixed-dim text-sm uppercase font-bold tracking-widest">LEVEL <span class="stat-level">1</span></span>
+                <div class="bg-surface-container-highest px-4 py-2 rounded-lg border border-primary/20 backdrop-blur-md">
+                    <span class="font-label text-primary text-sm uppercase font-bold tracking-widest">LEVEL <span class="stat-level">1</span></span>
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-4">
-                <div class="col-span-2 bg-surface-container-low border border-primary/30 rounded-xl p-6 relative overflow-hidden group neon-border-glow">
+                <div class="col-span-2 bg-surface-container-lowest border border-primary/30 rounded-xl p-6 relative overflow-hidden group neon-border-glow">
                     <div class="absolute top-0 right-0 p-4 opacity-10"><span class="material-symbols-outlined text-8xl" style="font-variation-settings: 'FILL' 1;">emoji_events</span></div>
                     <div class="relative z-10">
-                        <p class="font-label text-primary-fixed-dim text-[10px] uppercase tracking-[0.3em] mb-2">Current Score</p>
-                        <span class="font-headline text-5xl font-extrabold text-on-surface neon-glow-primary stat-score">0</span>
+                        <p class="font-label text-primary text-[10px] uppercase tracking-[0.3em] mb-2">Current Score</p>
+                        <div class="flex items-baseline gap-2">
+                            <span class="font-headline text-5xl font-extrabold text-on-surface neon-glow-primary stat-score">0</span>
+                        </div>
                     </div>
                 </div>
-                <div class="bg-surface-container-low border border-primary/20 rounded-xl p-5 backdrop-blur-sm">
+                <div class="bg-surface-container-highest border border-primary/20 rounded-xl p-5 backdrop-blur-sm">
                     <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-secondary text-lg">reorder</span><p class="font-label text-on-surface-variant text-[10px] uppercase tracking-widest">Lines Cleared</p></div>
                     <p class="font-headline text-3xl font-bold text-on-surface stat-lines">0</p>
                 </div>
-                <div class="bg-surface-container-low border border-primary/20 rounded-xl p-5 backdrop-blur-sm">
+                <div class="bg-surface-container-highest border border-primary/20 rounded-xl p-5 backdrop-blur-sm">
                     <div class="flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-tertiary text-lg">timer</span><p class="font-label text-on-surface-variant text-[10px] uppercase tracking-widest">Time</p></div>
                     <p id="stat-time" class="font-headline text-3xl font-bold text-on-surface">00:00</p>
                 </div>
+                <!-- Hidden High Score for selector compatibility -->
+                 <div class="hidden stat-high-score">0</div>
+                 <div class="hidden stat-level">1</div>
             </div>
         </div>
 
@@ -201,10 +163,6 @@
                 <div class="glass-panel p-4 rounded-xl border border-secondary/10 flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center text-secondary border border-secondary/30"><span class="material-symbols-outlined">bolt</span></div>
                     <div><p class="font-headline font-bold text-on-surface">Speed Demon</p><p class="text-xs text-on-surface-variant">Reach Level 15.</p></div>
-                </div>
-                <div class="glass-panel p-4 rounded-xl border border-tertiary/10 flex items-center gap-4 opacity-50 grayscale">
-                    <div class="w-12 h-12 rounded-full bg-tertiary/20 flex items-center justify-center text-tertiary border border-tertiary/30"><span class="material-symbols-outlined">layers</span></div>
-                    <div><p class="font-headline font-bold text-on-surface">Line King</p><p class="text-xs text-on-surface-variant">Clear 100 lines in one session.</p></div>
                 </div>
             </div>
         </div>

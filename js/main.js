@@ -1,60 +1,60 @@
 import { COLS, ROWS, BLOCK_SIZE, COLORS } from './tetrominoes.js';
 import { Game } from './game.js';
 
-const canvas = document.getElementById('board');
-const ctx = canvas.getContext('2d');
+// DOM Element Selectors with explicit null handling for reliability
+const getEl = (id) => document.getElementById(id);
 
-const nextCanvas = document.getElementById('next-piece');
-const nextCtx = nextCanvas.getContext('2d');
+const canvas = getEl('board');
+const ctx = canvas ? canvas.getContext('2d') : null;
+const nextCanvas = getEl('next-piece');
+const nextCtx = nextCanvas ? nextCanvas.getContext('2d') : null;
 
-const playBtn = document.getElementById('play-btn');
-const retryBtn = document.getElementById('retry-btn');
-const settingsBtn = document.getElementById('settings-btn');
-const resumeBtn = document.getElementById('resume-btn');
-const restartBtn = document.getElementById('restart-btn');
-const homeBtn = document.getElementById('home-btn');
+const playBtn = getEl('play-btn');
+const retryBtn = getEl('retry-btn');
+const settingsBtn = getEl('settings-btn');
+const resumeBtn = getEl('resume-btn');
+const restartBtn = getEl('restart-btn');
+const homeBtn = getEl('home-btn');
 
-const overlay = document.getElementById('game-overlay');
-const overlayTitle = document.getElementById('overlay-title');
-const startContent = document.getElementById('game-start-content');
-const settingsContent = document.getElementById('settings-content');
-const gameOverContent = document.getElementById('game-over-content');
-const countdownOverlay = document.getElementById('countdown-overlay');
-const countdownText = document.getElementById('countdown-text');
+const overlay = getEl('game-overlay');
+const overlayTitle = getEl('overlay-title');
+const startContent = getEl('game-start-content');
+const settingsContent = getEl('settings-content');
+const gameOverContent = getEl('game-over-content');
+const countdownOverlay = getEl('countdown-overlay');
+const countdownText = getEl('countdown-text');
 
-const scoreEl = document.getElementById('score');
-const linesEl = document.getElementById('lines');
-const levelEl = document.getElementById('level');
-const finalScoreEl = document.getElementById('final-score');
-const statTimeEl = document.getElementById('stat-time');
+const scoreEl = getEl('score');
+const linesEl = getEl('lines');
+const levelEl = getEl('level');
+const finalScoreEl = getEl('final-score');
+const statTimeEl = getEl('stat-time');
 
-const playView = document.getElementById('play-view');
-const statsView = document.getElementById('stats-view');
-const awardsView = document.getElementById('awards-view');
-const profileView = document.getElementById('profile-view');
+const playView = getEl('play-view');
+const statsView = getEl('stats-view');
+const awardsView = getEl('awards-view');
+const profileView = getEl('profile-view');
 
-const navPlay = document.getElementById('nav-play');
-const navStats = document.getElementById('nav-stats');
-const navAwards = document.getElementById('nav-awards');
-const navProfile = document.getElementById('nav-profile');
+const navPlay = getEl('nav-play');
+const navStats = getEl('nav-stats');
+const navAwards = getEl('nav-awards');
+const navProfile = getEl('nav-profile');
 
-const menuToggle = document.getElementById('menu-toggle');
-const menuClose = document.getElementById('menu-close');
-const sideMenu = document.getElementById('side-menu');
-const sideMenuOverlay = document.getElementById('side-menu-overlay');
+const menuToggle = getEl('menu-toggle');
+const menuClose = getEl('menu-close');
+const sideMenu = getEl('side-menu');
+const sideMenuOverlay = getEl('side-menu-overlay');
 
-const ctrlLeft = document.getElementById('ctrl-left');
-const ctrlRight = document.getElementById('ctrl-right');
-const ctrlDown = document.getElementById('ctrl-down');
-const ctrlRotate = document.getElementById('ctrl-rotate');
+const ctrlLeft = getEl('ctrl-left');
+const ctrlRight = getEl('ctrl-right');
+const ctrlDown = getEl('ctrl-down');
+const ctrlRotate = getEl('ctrl-rotate');
 
 let game = new Game();
 let requestId;
 let isPaused = false;
 let isCountingDown = false;
-let startTime = 0;
 let sessionStartTime = 0;
-let totalSessionTime = 0; // seconds
 let timeRecord = { start: 0, elapsed: 0, level: 1000 };
 
 // Cumulative Stats (Local Storage)
@@ -72,11 +72,16 @@ function saveProfile() {
 }
 
 function updateProfileUI() {
-    document.getElementById('profile-total-score').innerText = profileData.totalScore.toLocaleString();
-    document.getElementById('profile-total-games').innerText = profileData.totalGames.toLocaleString();
-    const hours = Math.floor(profileData.totalTime / 3600);
-    const mins = Math.floor((profileData.totalTime % 3600) / 60);
-    document.getElementById('profile-total-time').innerText = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+    const ts = getEl('profile-total-score');
+    const tg = getEl('profile-total-games');
+    const tt = getEl('profile-total-time');
+    if (ts) ts.innerText = profileData.totalScore.toLocaleString();
+    if (tg) tg.innerText = profileData.totalGames.toLocaleString();
+    if (tt) {
+        const hours = Math.floor(profileData.totalTime / 3600);
+        const mins = Math.floor((profileData.totalTime % 3600) / 60);
+        tt.innerText = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+    }
 }
 
 function addAlpha(hexColor, alpha) {
@@ -87,7 +92,7 @@ function addAlpha(hexColor, alpha) {
 }
 
 function drawBlock(context, x, y, colorId, isGhost = false) {
-    if (colorId === 0) return;
+    if (!context || colorId === 0) return;
     const pxX = x * BLOCK_SIZE;
     const pxY = y * BLOCK_SIZE;
     context.fillStyle = isGhost ? addAlpha(COLORS[colorId], 0.2) : COLORS[colorId];
@@ -109,6 +114,7 @@ function drawBlock(context, x, y, colorId, isGhost = false) {
 }
 
 function drawGrid(context, rows, cols) {
+    if (!context) return;
     context.strokeStyle = 'rgba(185, 159, 255, 0.03)';
     context.lineWidth = 1;
     for (let r = 0; r < rows; r++) {
@@ -119,25 +125,30 @@ function drawGrid(context, rows, cols) {
 }
 
 function updateStats() {
-    scoreEl.innerText = game.score.toLocaleString();
-    linesEl.innerText = game.lines;
-    levelEl.innerText = game.level;
+    if (scoreEl) scoreEl.innerText = game.score.toLocaleString();
+    if (linesEl) linesEl.innerText = game.lines;
+    if (levelEl) levelEl.innerText = game.level;
 
-    const currentSessionSeconds = sessionStartTime ? Math.floor((Date.now() - sessionStartTime) / 1000) : 0;
-    const m = Math.floor(currentSessionSeconds / 60).toString().padStart(2, '0');
-    const s = (currentSessionSeconds % 60).toString().padStart(2, '0');
-    statTimeEl.innerText = `${m}:${s}`;
-
-    if (!statsView.classList.contains('hidden')) {
-        document.querySelector('.stat-score').innerText = game.score.toLocaleString();
-        document.querySelector('.stat-lines').innerText = game.lines;
-        document.querySelector('.stat-level').innerText = game.level;
+    if (statTimeEl) {
+        const currentSessionSeconds = sessionStartTime ? Math.floor((Date.now() - sessionStartTime) / 1000) : 0;
+        const m = Math.floor(currentSessionSeconds / 60).toString().padStart(2, '0');
+        const s = (currentSessionSeconds % 60).toString().padStart(2, '0');
+        statTimeEl.innerText = `${m}:${s}`;
     }
+
+    // Safety checks for stat view elements
+    const sScore = document.querySelector('.stat-score');
+    const sLines = document.querySelector('.stat-lines');
+    const sLevel = document.querySelector('.stat-level');
+    if (sScore) sScore.innerText = game.score.toLocaleString();
+    if (sLines) sLines.innerText = game.lines;
+    if (sLevel) sLevel.innerText = game.level;
 }
 
 function draw() {
+    if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    nextCtx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
+    if (nextCtx) nextCtx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
     drawGrid(ctx, ROWS, COLS);
     for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
@@ -159,7 +170,7 @@ function draw() {
             }
         }
     }
-    if (game.nextPiece) {
+    if (game.nextPiece && nextCtx) {
         const shape = game.nextPiece.shape;
         const wOffset = (4 - shape[0].length) / 2;
         const hOffset = (4 - shape.length) / 2;
@@ -194,11 +205,11 @@ function showGameOver() {
     profileData.totalTime += Math.floor((Date.now() - sessionStartTime) / 1000);
     saveProfile();
 
-    startContent.classList.add('hidden');
-    settingsContent.classList.add('hidden');
-    gameOverContent.classList.remove('hidden');
-    finalScoreEl.innerText = game.score.toLocaleString();
-    overlay.classList.remove('hidden');
+    if (startContent) startContent.classList.add('hidden');
+    if (settingsContent) settingsContent.classList.add('hidden');
+    if (gameOverContent) gameOverContent.classList.remove('hidden');
+    if (finalScoreEl) finalScoreEl.innerText = game.score.toLocaleString();
+    if (overlay) overlay.classList.remove('hidden');
 }
 
 function init() {
@@ -208,7 +219,7 @@ function init() {
     timeRecord.start = performance.now();
     sessionStartTime = Date.now();
     if (requestId) cancelAnimationFrame(requestId);
-    overlay.classList.add('hidden');
+    if (overlay) overlay.classList.add('hidden');
     switchView('play');
     animate();
 }
@@ -217,26 +228,26 @@ function openSettings() {
     if (game.isGameOver || isCountingDown) return;
     isPaused = true;
     cancelAnimationFrame(requestId);
-    startContent.classList.add('hidden');
-    gameOverContent.classList.add('hidden');
-    settingsContent.classList.remove('hidden');
-    overlay.classList.remove('hidden');
+    if (startContent) startContent.classList.add('hidden');
+    if (gameOverContent) gameOverContent.classList.add('hidden');
+    if (settingsContent) settingsContent.classList.remove('hidden');
+    if (overlay) overlay.classList.remove('hidden');
 }
 
 function startCountdown(callback) {
     isCountingDown = true;
-    overlay.classList.add('hidden');
-    countdownOverlay.classList.remove('hidden');
+    if (overlay) overlay.classList.add('hidden');
+    if (countdownOverlay) countdownOverlay.classList.remove('hidden');
     let count = 3;
-    countdownText.innerText = count;
+    if (countdownText) countdownText.innerText = count;
     
     const interval = setInterval(() => {
         count--;
         if (count > 0) {
-            countdownText.innerText = count;
+            if (countdownText) countdownText.innerText = count;
         } else {
             clearInterval(interval);
-            countdownOverlay.classList.add('hidden');
+            if (countdownOverlay) countdownOverlay.classList.add('hidden');
             isCountingDown = false;
             callback();
         }
@@ -247,71 +258,77 @@ function resumeGame() {
     startCountdown(() => {
         isPaused = false;
         timeRecord.start = performance.now();
-        // Since we resumed, we need to adjust sessionStartTime if we want precise playtime tracking, 
-        // but for now simple Date.now() logic works well enough.
         animate();
     });
 }
 
 function openMenu() {
-    sideMenu.classList.add('open');
-    sideMenuOverlay.classList.remove('hidden');
-    setTimeout(() => sideMenuOverlay.classList.add('show'), 10);
+    if (sideMenu) sideMenu.classList.add('open');
+    if (sideMenuOverlay) {
+        sideMenuOverlay.classList.remove('hidden');
+        setTimeout(() => sideMenuOverlay.classList.add('show'), 10);
+    }
 }
 
 function closeMenu() {
-    sideMenu.classList.remove('open');
-    sideMenuOverlay.classList.remove('show');
-    setTimeout(() => sideMenuOverlay.classList.add('hidden'), 300);
+    if (sideMenu) sideMenu.classList.remove('open');
+    if (sideMenuOverlay) {
+        sideMenuOverlay.classList.remove('show');
+        setTimeout(() => sideMenuOverlay.classList.add('hidden'), 300);
+    }
 }
 
 function switchView(viewName) {
-    [playView, statsView, awardsView, profileView].forEach(v => v.classList.add('hidden'));
-    [navPlay, navStats, navAwards, navProfile].forEach(n => n.classList.remove('active'));
+    // Collect views and navs that are NOT null to avoid classList errors
+    const views = [playView, statsView, awardsView, profileView].filter(v => v !== null);
+    const navs = [navPlay, navStats, navAwards, navProfile].filter(n => n !== null);
 
-    if (viewName === 'play') {
+    views.forEach(v => v.classList.add('hidden'));
+    navs.forEach(n => n.classList.remove('active'));
+
+    if (viewName === 'play' && playView) {
         playView.classList.remove('hidden');
-        navPlay.classList.add('active');
-    } else if (viewName === 'stats') {
+        if (navPlay) navPlay.classList.add('active');
+    } else if (viewName === 'stats' && statsView) {
         statsView.classList.remove('hidden');
-        navStats.classList.add('active');
+        if (navStats) navStats.classList.add('active');
         updateStats();
-    } else if (viewName === 'awards') {
+    } else if (viewName === 'awards' && awardsView) {
         awardsView.classList.remove('hidden');
-        navAwards.classList.add('active');
-    } else if (viewName === 'profile') {
+        if (navAwards) navAwards.classList.add('active');
+    } else if (viewName === 'profile' && profileView) {
         profileView.classList.remove('hidden');
-        navProfile.classList.add('active');
+        if (navProfile) navProfile.classList.add('active');
         updateProfileUI();
     }
     closeMenu();
 }
 
-// Event Listeners
-playBtn.addEventListener('click', init);
-retryBtn.addEventListener('click', init);
-settingsBtn.addEventListener('click', openSettings);
-resumeBtn.addEventListener('click', resumeGame);
-restartBtn.addEventListener('click', init);
-homeBtn.addEventListener('click', () => {
+// Event Listeners with null safety
+if (playBtn) playBtn.addEventListener('click', init);
+if (retryBtn) retryBtn.addEventListener('click', init);
+if (settingsBtn) settingsBtn.addEventListener('click', openSettings);
+if (resumeBtn) resumeBtn.addEventListener('click', resumeGame);
+if (restartBtn) restartBtn.addEventListener('click', init);
+if (homeBtn) homeBtn.addEventListener('click', () => {
     isPaused = true;
     cancelAnimationFrame(requestId);
-    overlay.classList.remove('hidden');
-    startContent.classList.remove('hidden');
-    settingsContent.classList.add('hidden');
-    gameOverContent.classList.add('hidden');
-    overlayTitle.innerText = "TETRIS";
+    if (overlay) overlay.classList.remove('hidden');
+    if (startContent) startContent.classList.remove('hidden');
+    if (settingsContent) settingsContent.classList.add('hidden');
+    if (gameOverContent) gameOverContent.classList.add('hidden');
+    if (overlayTitle) overlayTitle.innerText = "TETRIS";
     switchView('play');
 });
 
-menuToggle.addEventListener('click', openMenu);
-menuClose.addEventListener('click', closeMenu);
-sideMenuOverlay.addEventListener('click', closeMenu);
+if (menuToggle) menuToggle.addEventListener('click', openMenu);
+if (menuClose) menuClose.addEventListener('click', closeMenu);
+if (sideMenuOverlay) sideMenuOverlay.addEventListener('click', closeMenu);
 
-navPlay.addEventListener('click', () => switchView('play'));
-navStats.addEventListener('click', () => switchView('stats'));
-navAwards.addEventListener('click', () => switchView('awards'));
-navProfile.addEventListener('click', () => switchView('profile'));
+if (navPlay) navPlay.addEventListener('click', () => switchView('play'));
+if (navStats) navStats.addEventListener('click', () => switchView('stats'));
+if (navAwards) navAwards.addEventListener('click', () => switchView('awards'));
+if (navProfile) navProfile.addEventListener('click', () => switchView('profile'));
 
 // Control Hold Logic (Hard Drop)
 let holdTimer;
@@ -335,19 +352,24 @@ function endHold() {
     }
 }
 
-ctrlLeft.addEventListener('click', () => { if (!isPaused && !isCountingDown && !game.isGameOver) { game.moveLeft(); draw(); } });
-ctrlRight.addEventListener('click', () => { if (!isPaused && !isCountingDown && !game.isGameOver) { game.moveRight(); draw(); } });
-ctrlRotate.addEventListener('click', () => { if (!isPaused && !isCountingDown && !game.isGameOver) { game.rotate(); draw(); } });
+if (ctrlLeft) ctrlLeft.addEventListener('click', () => { if (!isPaused && !isCountingDown && !game.isGameOver) { game.moveLeft(); draw(); } });
+if (ctrlRight) ctrlRight.addEventListener('click', () => { if (!isPaused && !isCountingDown && !game.isGameOver) { game.moveRight(); draw(); } });
+if (ctrlRotate) ctrlRotate.addEventListener('click', () => { if (!isPaused && !isCountingDown && !game.isGameOver) { game.rotate(); draw(); } });
 
 // Down Button with Hold logic
-ctrlDown.addEventListener('mousedown', startHold);
-ctrlDown.addEventListener('mouseup', endHold);
-ctrlDown.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(); });
-ctrlDown.addEventListener('touchend', (e) => { e.preventDefault(); endHold(); });
+if (ctrlDown) {
+    ctrlDown.addEventListener('mousedown', startHold);
+    ctrlDown.addEventListener('mouseup', endHold);
+    ctrlDown.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(); });
+    ctrlDown.addEventListener('touchend', (e) => { e.preventDefault(); endHold(); });
+}
 
 document.addEventListener('keydown', (e) => {
     if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) e.preventDefault();
-    if (e.key === 'p' || e.key === 'P') { togglePause(); return; }
+    if (e.key === 'p' || e.key === 'P') { 
+        if (isPaused) resumeGame(); else openSettings();
+        return; 
+    }
     if (isPaused || isCountingDown || game.isGameOver) return;
     if (e.code === 'ArrowLeft') { game.moveLeft(); draw(); }
     else if (e.code === 'ArrowRight') { game.moveRight(); draw(); }
@@ -358,3 +380,5 @@ document.addEventListener('keydown', (e) => {
 
 updateProfileUI();
 draw();
+// Final assurance that play view is visible
+switchView('play');
